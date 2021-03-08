@@ -3,13 +3,13 @@ package main
 import (
 	"C"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 	"unsafe"
 
 	"github.com/fluent/fluent-bit-go/output"
 )
-import "log"
 
 type Params struct {
 	bucket         string
