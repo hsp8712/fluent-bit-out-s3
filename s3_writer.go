@@ -1,13 +1,48 @@
 package main
 
-import "io"
+import (
+	"io"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+)
 
 type S3Writer struct {
 	io.WriteCloser
 }
 
-func NewS3Writer(bucket string, objectKey string) (*S3Writer, error) {
+var s3Client *s3.S3
+
+func NewSession(region string) error {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String(region),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	s3Client = s3.New(sess)
+	return nil
+}
+
+func NewS3Writer(region string, bucket string, objectKey string) (*S3Writer, error) {
+
+	s3Writer := S3Writer{}
+
+	input := &s3.CreateMultipartUploadInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(objectKey),
+	}
+
+	output, err := s3Client.CreateMultipartUpload(input)
+	if err != nil {
+		return nil, err
+	}
+
 	// TODO
+
 	return nil, nil
 }
 
