@@ -12,10 +12,10 @@ import (
 )
 
 type Params struct {
-	bucket         string
-	region         string
-	multipart_size int
-	s3_key_format  string
+	bucket       string
+	region       string
+	s3PartSize   int
+	s3KeyPattern string
 }
 
 var parameters *Params
@@ -32,18 +32,18 @@ func FLBPluginInit(plugin unsafe.Pointer) int {
 	// Example to retrieve an optional configuration parameter
 	bucket := output.FLBPluginConfigKey(plugin, "bucket")
 	region := output.FLBPluginConfigKey(plugin, "region")
-	multipartSize := output.FLBPluginConfigKey(plugin, "multipart_size")
-	s3KeyFormat := output.FLBPluginConfigKey(plugin, "s3_key_format")
+	s3PartSize := output.FLBPluginConfigKey(plugin, "s3_part_size")
+	s3KeyPattern := output.FLBPluginConfigKey(plugin, "s3_key_pattern")
 
 	parameters.bucket = bucket
 	parameters.region = region
-	multipartSizeInt, err := strconv.Atoi(multipartSize)
+	s3KeyPatternInt, err := strconv.Atoi(s3PartSize)
 	if err != nil {
 		log.Printf("[out_s3] multipart_size invalid")
 		return output.FLB_ERROR
 	}
-	parameters.multipart_size = multipartSizeInt
-	parameters.s3_key_format = s3KeyFormat
+	parameters.s3PartSize = s3KeyPatternInt
+	parameters.s3KeyPattern = s3KeyPattern
 	return output.FLB_OK
 }
 
